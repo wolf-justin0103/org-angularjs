@@ -8,6 +8,7 @@ angular.module('oraApp.collaboration')
 			$scope.mySubject = task.subject;
 			$scope.identity = identity;
 			$scope.isAllowed = isAllowed;
+			$scope.statusLabel = taskService.statusLabel;
 			$scope.daysAgo = function(when) {
 				var now = new Date();
 				var d = new Date(Date.parse(when));
@@ -25,7 +26,7 @@ angular.module('oraApp.collaboration')
 						return 'text-muted';
 				}
 			};
-			$scope.joinTask = function() {
+			$scope.joinTask = function(task) {
 				taskService.joinTask(task, $scope.identity);
 			};
 			$scope.unjoinTask = function() {
@@ -57,15 +58,21 @@ angular.module('oraApp.collaboration')
 				if($scope.isAllowed.estimateTask(task, member)) {
 					$scope.estimationEditing = true;
 				}
-			}
+			};
 			$scope.enableSubjectEditing = function(task) {
 				if(isAllowed.editTask(task)) {
 					$log.debug('Enable subject editing');
 					$scope.subjectEditing = true;
 				}
-			}
+			};
 			$scope.editSubject = function(subject) {
 				$scope.subjectEditing = false;
 				$scope.task.subject = subject;
+			};
+			$scope.completeTask = function(task) {
+				taskService.completeTask(task, identity);
+			}
+			$scope.acceptTask = function(task) {
+				taskService.acceptTask(task, identity);
 			}
 		}]);

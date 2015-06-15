@@ -59,14 +59,14 @@
 		</div>
 		<div class="col-md-3">
 			<div class="status">
-				<span ng-class="statusClass()">{{ { 10: 'Ongoing', 20: 'Completed' }[task.status] }}</span>
+				<span ng-class="statusClass()">{{ statusLabel[task.status] }}</span>
 			</div>
 			<div class="estimation">
 				<span class="estimation-header">Estimation</span>
-				<span class="estimation-value">
-					<span ng-if="task.estimation == null">In progress</span>
-					<span ng-if="task.estimation == -1">Skipped</span>
-					<span ng-if="task.estimation >= 0 && task.estimation !== null">{{ task.estimation | number : 0 }} Credits</span>
+				<span class="estimation-value" ng-switch="task.estimation">
+					<span ng-switch-when="null">In progress</span>
+					<span ng-switch-when="-1">Skipped</span>
+					<span ng-switch-default>{{ task.estimation | number : 0 }} Credits</span>
 				</span>
 			</div>
 		</div>
@@ -75,11 +75,14 @@
 <div class="modal-footer">
 	<div class="btn-group" dropdown is-open="status.isopen">
 		<button class="btn btn-default dropdown-toggle" dropdown-toggle ng-disabled="disabled" aria-expanded="false">
+			Others
 			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu dropdown-menu-right" role="menu">
 			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" ng-click="deleteTask(task.id)">Delete</a></li>
 		</ul>
 	</div>
-	<button class="btn btn-primary" ng-if="acl.isAllowed(currUser, task, 'joinTask')" ng-click="joinTask()">Join</button>
+	<button class="btn btn-default" ng-if="isAllowed.acceptTask(task)" ng-click="acceptTask(task)">Accept</button>
+	<button class="btn btn-default" ng-if="isAllowed.completeTask(task)" ng-click="completeTask(task)">Complete</button>
+	<button class="btn btn-primary" ng-if="isAllowed.joinTask(task)" ng-click="joinTask(task)">Join</button>
 </div>

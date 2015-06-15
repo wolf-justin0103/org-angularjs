@@ -21,17 +21,26 @@
 				<h3 class="panel-title"><a ng-click="openTaskDetail(task)">{{task.subject}}</a></h3>
 			</div>
 			<div class="panel-body">
-				<ul style="list-style: none; padding: 0; margin: 0">
-					<li>{{ task.status }}</li>
-					<li>estimation</li>
-					<li>Members: {{ count(task.members) }}</li>
-					<li>
-						<button ng-if="isAllowed.executeTask(task)" data-href="{{ task._links['ora:execute'] }}" data-action="executeTask" class="btn btn-default">Ongoing</button>
-						<button ng-if="isAllowed.completeTask(task)" data-href="{{ task._links['ora:complete'] }}" data-action="completeTask" class="btn btn-default">Complete</button>
-						<button ng-if="isAllowed.acceptTask(task)" data-href="{{ task._links['ora:accept'] }}" data-action="acceptTask" class="btn btn-default">Accept</button>
-						<button ng-if="isAllowed.assignShares(task)" data-href="{{ task._links['ora:assignShares'] }}" data-toggle="modal" data-target="#assignSharesModal" class="btn btn-default">Assign share</button>
-					</li>
-				</ul>
+				<div class="col-md-9" style="padding-left: 0">
+					<ul style="list-style: none; padding: 0; margin: 0">
+						<li>{{ statusLabel[task.status] }}</li>
+						<li ng-switch="task.estimation">
+							<span ng-switch-when="null">Estimation in progress</span>
+							<span ng-switch-when="-1">Estimation skipped</span>
+							<span ng-switch-default>{{ task.estimation | number : 0 }} Credits</span>
+						</li>
+						<li>
+							<button ng-if="isAllowed.executeTask(task)" data-href="{{ task._links['ora:execute'] }}" data-action="executeTask" class="btn btn-default">Ongoing</button>
+							<button ng-if="isAllowed.assignShares(task)" data-href="{{ task._links['ora:assignShares'] }}" data-toggle="modal" data-target="#assignSharesModal" class="btn btn-default">Assign share</button>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-3" style="padding-right: 0px; text-align: right">
+					<ul style="list-style: none; padding: 0; margin: 0">
+						<li ng-if="count(task.members) == 1" data-ng-repeat="member in task.members"><img ng-src="{{ member.picture }}" style="max-width: 30px; max-height: 30px;" class="img-circle"></li>
+						<li ng-if="count(task.members) > 1">{{ count(task.members) }} members</li>
+					</ul>
+				</div>
 			</div>
 		</li>
 	</ul>
