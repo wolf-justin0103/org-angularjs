@@ -1,11 +1,12 @@
 <div>
     <md-tabs
         data-ng-if="selectedIndex >= 0"
-        style="width: 100%; position: absolute; bottom: 0;"
+        style="width: 100%;"
         md-dynamic-height
         class="md-primary"
         md-selected="selectedIndex"
-        md-stretch-tabs="always">
+        md-stretch-tabs="always"
+        md-align-tabs="bottom">
         	<md-tab ui-sref="org.collaboration({ orgId: organizationId })" label="Items">
         	</md-tab>
         	<md-tab ui-sref="org.organizationStatement({ orgId: organizationId })" label="Credits">
