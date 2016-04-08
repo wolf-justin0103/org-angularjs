@@ -85,6 +85,7 @@ angular.module('app.collaboration')
 					templateUrl: "app/collaboration/partials/new-stream.html",
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					locals: {
 						orgId: $stateParams.orgId
 					}
@@ -98,6 +99,7 @@ angular.module('app.collaboration')
 					templateUrl: "app/collaboration/partials/new-item.html",
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					locals: {
 						orgId: $stateParams.orgId,
 						streams: $scope.streams
@@ -110,6 +112,7 @@ angular.module('app.collaboration')
 					controller: "OnItemAddedDialogController",
 					templateUrl: "app/collaboration/partials/on-item-added-dialog.html",
 					clickOutsideToClose: true,
+					fullscreen: true,
 					locals: {
 						item: newItem
 					}
@@ -128,6 +131,7 @@ angular.module('app.collaboration')
 					templateUrl: 'app/collaboration/partials/estimate-item.html',
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					locals: {
 						item: item,
 						prevEstimation: item.members[$scope.identity.getId()].estimation
@@ -142,6 +146,7 @@ angular.module('app.collaboration')
 					templateUrl: 'app/collaboration/partials/assign-shares.html',
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					scope: $scope.$new(),
 					locals: {
 						item: item
