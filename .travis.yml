@@ -11,7 +11,7 @@ sudo: required
 dist: trusty
 
 notifications:
-  slack: ora-cocoon:H6FqgNRimkmlwsdBA9TzUMLJ#git
+  slack: orateam:UDiRK1WaPwbU8uNtWHzqT5vw
 
 script:
   - grunt jshint

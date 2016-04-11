@@ -1,25 +1,13 @@
 angular.module('app.collaboration')
-	.controller('ItemListController', [
-		'$scope',
-		'$log',
-		'$interval',
-		'$stateParams',
-		'$mdDialog',
-		'$mdToast',
-		'streamService',
-		'itemService',
-		'$state',
-		function (
-			$scope,
-			$log,
-			$interval,
-			$stateParams,
-			$mdDialog,
-			$mdToast,
-			streamService,
-			itemService,
-			$state) {
-
+	.controller('ItemListController', ['$scope', '$log', '$interval', '$stateParams', '$mdDialog', '$mdToast', 'streamService', 'itemService',
+		function ($scope, $log, $interval, $stateParams, $mdDialog, $mdToast, streamService, itemService) {
+			this.onLoadingError = function(error) {
+				switch (error.status) {
+					case 401:
+						this.cancelAutoUpdate();
+						break;
+				}
+			};
 			$scope.streams = null;
 			$scope.filters = {
 				limit: 10,
@@ -44,10 +32,6 @@ angular.module('app.collaboration')
 			this.getOwner = function(item) {
 				var member = itemService.getOwner(item);
 				return $scope.user(member);
-			};
-
-			this.checkImIn = function(item){
-				return itemService.isIn(item,$scope.identity.getId());
 			};
 
 			this.loadItems = function() {
@@ -85,12 +69,12 @@ angular.module('app.collaboration')
 					templateUrl: "app/collaboration/partials/new-stream.html",
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					locals: {
 						orgId: $stateParams.orgId
 					}
 				}).then(this.addStream);
 			};
-
 			this.openNewItem = function(ev) {
 				$mdDialog.show({
 					controller: NewItemController,
@@ -98,29 +82,13 @@ angular.module('app.collaboration')
 					templateUrl: "app/collaboration/partials/new-item.html",
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					locals: {
 						orgId: $stateParams.orgId,
 						streams: $scope.streams
 					}
-				}).then(this.onItemAdded);
+				}).then(this.addItem);
 			};
-
-			this.onItemAdded = function(newItem){
-				$mdDialog.show({
-					controller: "OnItemAddedDialogController",
-					templateUrl: "app/collaboration/partials/on-item-added-dialog.html",
-					clickOutsideToClose: true,
-					locals: {
-						item: newItem
-					}
-				}).then(function(){
-					$state.go('org.item',{
-						orgId: newItem.organization.id,
-						itemId: newItem.id
-					});
-				});
-			};
-
 			this.openEstimateItem = function(ev, item) {
 				$mdDialog.show({
 					controller: EstimateItemController,
@@ -128,13 +96,14 @@ angular.module('app.collaboration')
 					templateUrl: 'app/collaboration/partials/estimate-item.html',
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					locals: {
 						item: item,
 						prevEstimation: item.members[$scope.identity.getId()].estimation
 					}
 				}).then(this.updateItem);
 			};
-
+                        
 			this.openAssignShares = function(ev, item) {
 				$mdDialog.show({
 					controller: AssignSharesController,
@@ -142,13 +111,13 @@ angular.module('app.collaboration')
 					templateUrl: 'app/collaboration/partials/assign-shares.html',
 					targetEvent: ev,
 					clickOutsideToClose: true,
+					fullscreen: true,
 					scope: $scope.$new(),
 					locals: {
 						item: item
 					}
 				}).then(this.updateItem);
 			};
-
 			this.addStream = function(stream) {
 				$scope.streams._embedded['ora:stream'][stream.id] = stream;
 				$mdToast.show(
@@ -158,11 +127,9 @@ angular.module('app.collaboration')
 						.hideDelay(3000)
 				);
 			};
-
 			this.addItem = function(item) {
 				$scope.items._embedded['ora:task'].unshift(item);
 			};
-
 			this.updateItem = function(item) {
 				var items = $scope.items._embedded['ora:task'];
 				for(var i = 0; i < items.length; i++) {
@@ -186,13 +153,5 @@ angular.module('app.collaboration')
 				return this.isAllowed('joinItem', item) ||
 						this.isAllowed('estimateItem', item) ||
 						this.isAllowed('assignShares', item)|| this.isAllowed('approveIdea', item);
-			};
-
-			this.onLoadingError = function(error) {
-				switch (error.status) {
-					case 401:
-						this.cancelAutoUpdate();
-						break;
-				}
 			};
 		}]);

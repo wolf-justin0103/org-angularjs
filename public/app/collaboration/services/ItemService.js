@@ -109,7 +109,6 @@ var ItemService = function($resource, $interval, identity) {
 	};
 	var isQueryPolling = false;
 	this.query = function(organizationId, filters, success, error) {
-		error = error || _.noop;
 		isQueryPolling = true;
 		return resource.query(
 				angular.extend({ orgId: organizationId }, filters),
@@ -243,11 +242,6 @@ ItemService.prototype = {
 				item.members.hasOwnProperty(userId) &&
 				item.members[userId].role == this.ITEM_ROLES.ROLE_MEMBER;
 	},
-	isIn: function(item, userId) {
-		return item &&
-				item.members &&
-				item.members.hasOwnProperty(userId);
-	},
 	hasJoined: function(item, userId) {
 		return item &&
 				item.members &&
@@ -379,7 +373,7 @@ ItemService.prototype = {
                 approveIdea: function(resource) {
 			return resource &&
 					this.getIdentity().isAuthenticated() &&
-					resource.status == this.ITEM_STATUS.IDEA &&
+					resource.status == this.ITEM_STATUS.IDEA && 
                                         resource.approvals[this.getIdentity().getId()]=== undefined;
 		},
 		remindItemEstimate: function(resource) {

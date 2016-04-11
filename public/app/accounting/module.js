@@ -5,16 +5,16 @@ angular.module('app.accounting', ['ui.router', 'ngResource'])
 				.state('org.organizationStatement', {
 					url: '/organization-statement',
 					templateUrl: 'app/accounting/partials/statement.html',
-					controller: 'StatementController as ctrl',
+					controller: 'OrganizationStatementController as ctrl',
 					data: {
-						pillarName: 'credits',
+						pillarName: 'CREDITS',
 						selectedTab: 0
 					}
 				})
 				.state('org.personalStatement', {
 					url: '/personal-statement',
 					templateUrl: 'app/accounting/partials/statement.html',
-					controller: 'StatementController as ctrl',
+					controller: 'PersonalStatementController as ctrl',
 					data: {
 						selectedTab: 1
 					}

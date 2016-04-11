@@ -1,27 +1,6 @@
 angular.module('app')
-	.controller('AppController', [
-		'$scope',
-		'$timeout',
-		'$mdSidenav',
-		'$mdUtil',
-		'$log',
-		'$stateParams',
-		'SelectedOrganizationId',
-		function(
-			$scope,
-			$timeout,
-			$mdSidenav,
-			$mdUtil,
-			$log,
-			$stateParams,
-			SelectedOrganizationId) {
-
-			$scope.$on('$stateChangeSuccess',function(){
-				if($stateParams.orgId){
-					SelectedOrganizationId.set($stateParams.orgId);
-				}
-			});
-
+	.controller('AppController', ['$scope', '$timeout', '$mdSidenav', '$mdUtil', '$log',
+		function($scope, $timeout, $mdSidenav, $mdUtil, $log) {
 			$scope.toggleLeft = buildToggler('left');
 			$scope.toggleRight = buildToggler('right');
 			/**

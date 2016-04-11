@@ -8,7 +8,6 @@ angular.module('app.accounting')
 						break;
 				}
 			};
-			console.log("personalController");
 			$scope.filters = {
 				limit: 10
 			};
