@@ -1,4 +1,4 @@
-var ItemService = function($resource, $interval, identity) {
+var DecisionService = function($resource, $interval, identity) {
 	var resource = $resource('api/:orgId/task-management/tasks/:itemId/:controller/:type', { orgId: '@orgId' }, {
 		save: {
 			method: 'POST',
@@ -206,8 +206,8 @@ var ItemService = function($resource, $interval, identity) {
 	};
 };
 
-ItemService.prototype = {
-	constructor: ItemService,
+DecisionService.prototype = {
+	constructor: DecisionService,
 	ITEM_STATUS: {
 		'IDEA'     : 0,
 		'OPEN'     : 10,
@@ -215,7 +215,7 @@ ItemService.prototype = {
 		'COMPLETED': 30,
 		'ACCEPTED' : 40,
 		'CLOSED'   : 50,
-                'ARCHIVED' : -20,
+        'ARCHIVED' : -20,
 	},
 	ITEM_ROLES: {
 		'ROLE_MEMBER': 'member',
@@ -422,6 +422,6 @@ ItemService.prototype = {
 		return true;
 	}
 };
-angular.module('app.collaboration')
-	.constant('ITEM_STATUS', ItemService.prototype.ITEM_STATUS)
-	.service('itemService', ['$resource', '$interval', 'identity', ItemService]);
+angular.module('app.decisions')
+	.constant('ITEM_STATUS', DecisionService.prototype.ITEM_STATUS)
+	.service('decisionService', ['$resource', '$interval', 'identity', DecisionService]);

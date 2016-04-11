@@ -1,5 +1,5 @@
-angular.module('app.collaboration')
-	.controller('ItemListController', [
+angular.module('app.decisions')
+	.controller('DecisionListController', [
 		'$scope',
 		'$log',
 		'$interval',
@@ -7,7 +7,7 @@ angular.module('app.collaboration')
 		'$mdDialog',
 		'$mdToast',
 		'streamService',
-		'itemService',
+		'decisionService',
 		'$state',
 		function (
 			$scope,
@@ -17,7 +17,7 @@ angular.module('app.collaboration')
 			$mdDialog,
 			$mdToast,
 			streamService,
-			itemService,
+			decisionService,
 			$state) {
 
 			$scope.streams = null;
@@ -27,32 +27,32 @@ angular.module('app.collaboration')
 			};
 			$scope.items = [];
 			streamService.startQueryPolling($stateParams.orgId, function(data) { $scope.streams = data; }, this.onLoadingError, 605000);
-			itemService.startQueryPolling($stateParams.orgId, $scope.filters, function(data) { $scope.items = data; }, this.onLoadingError, 10000);
+			decisionService.startQueryPolling($stateParams.orgId, $scope.filters, function(data) { $scope.items = data; }, this.onLoadingError, 10000);
 			this.cancelAutoUpdate = function() {
 				streamService.stopQueryPolling();
-				itemService.stopQueryPolling();
+				decisionService.stopQueryPolling();
 			};
 			$scope.$on('$destroy', this.cancelAutoUpdate);
 
-			$scope.ITEM_STATUS = itemService.ITEM_STATUS;
+			$scope.ITEM_STATUS = decisionService.ITEM_STATUS;
 			this.isAllowed = function(command, resource) {
 				if(command == 'createStream') {
 					return streamService.isAllowed(command, resource);
 				}
-				return itemService.isAllowed(command, resource);
+				return decisionService.isAllowed(command, resource);
 			};
 			this.getOwner = function(item) {
-				var member = itemService.getOwner(item);
+				var member = decisionService.getOwner(item);
 				return $scope.user(member);
 			};
 
 			this.checkImIn = function(item){
-				return itemService.isIn(item,$scope.identity.getId());
+				return decisionService.isIn(item,$scope.identity.getId());
 			};
 
 			this.loadItems = function() {
 				$scope.filters.limit = 10;
-				itemService.query($stateParams.orgId, $scope.filters, function(data) { $scope.items = data; }, this.onLoadingError);
+				decisionService.query($stateParams.orgId, $scope.filters, function(data) { $scope.items = data; }, this.onLoadingError);
 			};
 
 			$scope.isLoadingMore = false;
@@ -60,7 +60,7 @@ angular.module('app.collaboration')
 				$scope.isLoadingMore = true;
 				$scope.filters.limit = $scope.items.count + 10;
 				var that = this;
-				itemService.query($stateParams.orgId, $scope.filters,
+				decisionService.query($stateParams.orgId, $scope.filters,
 						function(data) {
 							$scope.isLoadingMore = false;
 							$scope.items = data;
@@ -173,13 +173,13 @@ angular.module('app.collaboration')
 				}
 			};
 			this.joinItem = function(item) {
-				itemService.joinItem(item, this.updateItem, $log.warn);
+				decisionService.joinItem(item, this.updateItem, $log.warn);
 			};
 			this.unjoinItem = function(item) {
-				itemService.unjoinItem(item, this.updateItem, $log.warn);
+				decisionService.unjoinItem(item, this.updateItem, $log.warn);
 			};
 			this.isNewEntitiesAllowed = function(organization) {
-				return itemService.isAllowed('createItem', organization) ||
+				return decisionService.isAllowed('createItem', organization) ||
 								streamService.isAllowed('createStream', organization);
 			};
 			this.hasActions = function(item) {

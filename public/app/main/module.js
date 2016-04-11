@@ -10,13 +10,19 @@ angular.module('app', [
 	'app.people',
 	'app.flow',
 	'app.accounting',
-	'app.kanbanize'
+	'app.kanbanize',
+	'app.decisions'
 ])
 	.config(['$stateProvider', '$urlRouterProvider',
 		function($stateProvider, $urlRouterProvider) {
-			$urlRouterProvider.otherwise(function($injector, $location) {
+			$urlRouterProvider.otherwise(function($injector) {
 				var $state = $injector.get("$state");
-				$state.go("flow");
+				var SelectedOrganizationId = $injector.get("SelectedOrganizationId");
+				if(SelectedOrganizationId.get()){
+					$state.go("flow");
+				}else{
+					$state.go("organizations");
+				}
 			});
 			$stateProvider
 				.state('org', {
@@ -26,11 +32,19 @@ angular.module('app', [
 					resolve: {
 						members: function($stateParams, memberService) {
 							return memberService.query({ orgId: $stateParams.orgId });
-						}
+						},
+						streams:['streamService','$stateParams','$q',function(streamService,$stateParams,$q){
+							var deferred = $q.defer();
+							streamService.query($stateParams.orgId,function(data){
+								deferred.resolve(_.values(data._embedded['ora:stream']));
+							});
+							return deferred.promise;
+						}]
 					},
-					controller: function($scope, $log, $stateParams, members) {
+					controller: function($scope, $log, $stateParams, members,streams) {
 						$scope.organization = $scope.identity.getMembership($stateParams.orgId);
 						$scope.members = members;
+						$scope.stream = streams[0];
 						$scope.user = function(member) {
 							if($scope.members && member) {
 								return $scope.members._embedded['ora:member'][member.id];
@@ -44,7 +58,7 @@ angular.module('app', [
 									$scope.pillar.name = toState.data.pillarName;
 								}
 								if(toState.data && toState.data.selectedTab){
-									$scope.currentTab = toState.data.selectedTab;	
+									$scope.currentTab = toState.data.selectedTab;
 								}
 							}
 						);
@@ -54,7 +68,7 @@ angular.module('app', [
 	.config(['$mdThemingProvider',
 		function($mdThemingProvider) {
 			$mdThemingProvider.theme('default')
-				.primaryPalette('pink')
+				.primaryPalette('blue-grey')
 				.accentPalette('indigo');
 			$mdThemingProvider.theme('input', 'default')
 				.primaryPalette('grey');
