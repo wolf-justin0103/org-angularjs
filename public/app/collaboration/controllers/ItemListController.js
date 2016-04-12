@@ -22,10 +22,6 @@ angular.module('app.collaboration')
 
 			$scope.decisions = $state.$current.data.decisions;
 
-			$scope.changeUpdateTime = false;
-
-			$scope.changeStatusTime = false;
-
 			$scope.streams = null;
 
 			$scope.filters = {
@@ -214,12 +210,5 @@ angular.module('app.collaboration')
 						break;
 				}
 			};
-			this.invertUpdateTime = function() {
-				$scope.changeUpdateTime = !$scope.changeUpdateTime;
-			};
-			this.invertStatusTime = function() {
-				$scope.changeStatusTime = !$scope.changeStatusTime;
-			};
-
 
 		}]);
