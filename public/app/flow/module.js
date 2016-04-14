@@ -11,8 +11,6 @@ angular.module('app.flow', ['ui.router'])
 							var deferred = $q.defer();
 							streamService.query(SelectedOrganizationId.get(),function(data){
 								deferred.resolve(_.values(data._embedded['ora:stream']));
-							},function(){
-								deferred.resolve([]);
 							});
 							return deferred.promise;
 						}]

@@ -14,7 +14,7 @@ angular.module('app.identity')
 
 			$scope.renderSignInButton = function() {
 				gapi.signin2.render('googleSignIn', {
-					'scope': 'https://www.googleapis.com/auth/drive.readonly',
+					//'scope': 'https://www.googleapis.com/auth/plus.login',
 					'width': 230,
 					'longtitle': true,
 					'theme': 'dark',
