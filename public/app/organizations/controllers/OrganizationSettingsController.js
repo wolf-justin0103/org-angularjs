@@ -8,7 +8,6 @@ angular.module('app')
 		'$state',
 		'streamService',
 		'$mdDialog',
-        'settingsService',
 		function (
 			$scope,
 			$log,
@@ -17,22 +16,11 @@ angular.module('app')
 			kanbanizeService,
 			$state,
 			streamService,
-			$mdDialog,
-            settingsService) {
+			$mdDialog) {
 
 			$scope.settings = {};
 
 			this.kanbanizeSectionAllowed = kanbanizeService.isAllowed.bind(kanbanizeService);
-
-            $scope.orgSettings = {};
-            settingsService.get($stateParams.orgId).then(function(settings){
-                console.log(settings);
-                $scope.orgSettings = settings;
-            });
-
-            this.updateSettings = function(){
-                settingsService.set($stateParams.orgId,$scope.orgSettings);
-            };
 
 			this.updateKanbanizeSettings = function(){
 				kanbanizeService.updateSettings($stateParams.orgId, $scope.settings,
