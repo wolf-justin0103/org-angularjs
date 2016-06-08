@@ -41,14 +41,6 @@ var MemberService = function($http,$resource, identity) {
 		}).success(success).error(error);
 	};
 
-	this.removeUserFromOrganization = function(organizationId, memberId) {
-		return $http({
- 			method: 'DELETE',
- 			url: 'api/'+organizationId+'/people/members/' + memberId,
-			headers: { 'GOOGLE-JWT': identity.getToken() }
-		});
-	};
-
 	this.unjoinOrganization = function(organization, success, error) {
 		resource.delete({ orgId: organization.id }, success, error);
 	};
@@ -94,9 +86,6 @@ var MemberService = function($http,$resource, identity) {
 MemberService.prototype = {
 	constructor: MemberService,
 	visibilityCriteria: {
-		removeUser: function(organizationId) {
-			return 'admin' === this.getIdentity().getMembershipRole(organizationId);
-		},
 		joinOrganization: function(organization) {
 			return organization &&
 					this.getIdentity().getMembership(organization.id) === null;
