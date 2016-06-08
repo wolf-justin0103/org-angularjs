@@ -62,7 +62,7 @@
 			</md-button>
 	</div> -->
 </md-content>
-<md-card  class="card-item" ng-repeat="item in items._embedded['ora:task']"
+<md-card ui-sref="org.item({ orgId: item.organization.id, itemId: item.id })" class="card-item" ng-repeat="item in items._embedded['ora:task']"
 ng-init="owner = ctrl.getOwner(item)"
 infinite-scroll="ctrl.loadMore()"
 infinite-scroll-distance="1"
@@ -74,13 +74,10 @@ infinite-scroll-immediate-check="false">
 		<div layout="row">
 			<span style="font-size: 13px; color:#5f6b76; margin-bottom:5px;" data-ng-show="item.decision === 'true'">Decision</span>
 		</div>
-		<span style="font-size: 22px; color:#203946; margin-top: -5px;">
+		<span style="font-size: 22px; color:#203946; margin-top: -5px;padding: 10px 0 10px 0">
 			{{ item.subject }}
 		</span>
-		<p style="text-transform: uppercase; color:#203946; font-size: 14px; margin-top: 0px;">
-			{{ ctrl.stream(item).subject }}
-		</p>
-		<span style="font-size: 13px; margin-top: -10px; line-height: 14px;" class="md-subhead padding-right-30 justify">
+		<span style="font-size: 13px; line-height: 14px;" class="md-subhead padding-right-30 justify">
 			{{item.description}}
 		</span>
 		<div layout="row" style="">
@@ -126,7 +123,7 @@ infinite-scroll-immediate-check="false">
 		<p class="margin-left-10" style="font-size: 14px; margin-top: 25px; color: #607D8B;; margin-bottom: 25px;">I'm involved</p>
 	</div>
 	 <span flex></span>
-	<md-button class="md-button md-warn md-ink-ripple" ui-sref="org.item({ orgId: item.organization.id, itemId: item.id })">VIEW ITEM</md-button>
+	<md-button class="md-button md-warn md-ink-ripple">VIEW ITEM</md-button>
 </md-card-action>
 </md-card>
 <div class="space-at-end"></div>
